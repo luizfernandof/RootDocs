@@ -1,0 +1,134 @@
+/* md-editor-v3 overrides for Vuetify dark theme integration */
+
+.md-editor-v3 {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ===================== DARK THEME ===================== */
+
+/* Editor shell — backgrounds */
+.md-editor-dark.md-editor {
+  background-color: #1a1d27 !important;
+  border-color: #2e3348 !important;
+}
+
+.md-editor-dark.md-editor,
+.md-editor-dark .md-editor-content,
+.md-editor-dark .md-editor-contain {
+  --md-color: #c9cdd4 !important;
+  --md-hover-color: #e0e0e0 !important;
+  --md-bk-color: #1a1d27 !important;
+  --md-bk-color-outstand: #242836 !important;
+  --md-bk-hover-color: #2a2e3d !important;
+  --md-border-color: #2e3348 !important;
+  --md-border-hover-color: #444a60 !important;
+  --md-border-active-color: #818cf8 !important;
+  --md-scrollbar-bg-color: #1a1d27 !important;
+  --md-scrollbar-thumb-color: #3a3f52 !important;
+  --md-scrollbar-thumb-hover-color: #4a506a !important;
+  --md-scrollbar-thumb-active-color: #4a506a !important;
+}
+
+/* Preview pane — inside editor and standalone */
+.md-editor-dark .md-editor-preview-wrapper {
+  background-color: #1a1d27 !important;
+}
+
+.md-editor-dark .md-editor-preview {
+  background-color: #1a1d27 !important;
+  --md-theme-color: #c9cdd4 !important;
+  --md-theme-color-reverse: #1a1d27 !important;
+  --md-theme-color-hover: #242836 !important;
+  --md-theme-color-hover-inset: #2e3348 !important;
+  --md-theme-border-color: #2e3348 !important;
+  --md-theme-border-color-reverse: #818cf8 !important;
+  --md-theme-border-color-inset: #3a3f52 !important;
+  --md-theme-bg-color: #1a1d27 !important;
+  --md-theme-bg-color-inset: #242836 !important;
+  --md-theme-heading-color: #e0e0e0 !important;
+  --md-theme-link-color: #818cf8 !important;
+  --md-theme-link-hover-color: #6366f1 !important;
+  --md-theme-quote-color: #a0a4b0 !important;
+  --md-theme-quote-border: 4px solid #818cf8 !important;
+  --md-theme-quote-bg-color: rgba(129, 140, 248, 0.08) !important;
+  --md-theme-table-stripe-color: #1e2230 !important;
+  --md-theme-table-td-border-color: #2e3348 !important;
+  --md-theme-code-inline-color: #c9d1d9 !important;
+  --md-theme-code-inline-bg-color: #2d333b !important;
+  --md-theme-code-block-color: #a9b7c6 !important;
+  --md-theme-code-block-bg-color: #1e2230 !important;
+  --md-theme-code-before-bg-color: #1e2230 !important;
+  --md-theme-code-copy-tips-color: #c9cdd4 !important;
+  --md-theme-code-copy-tips-bg-color: #242836 !important;
+}
+
+/* Standalone MdPreview (not inside editor) */
+.md-editor-dark.md-editor-previewOnly {
+  background-color: #1a1d27 !important;
+}
+
+/* Code block header */
+.md-editor-dark .md-editor-code .md-editor-code-head {
+  background-color: #1e2230 !important;
+}
+
+/* Code copy buttons */
+.md-editor-dark .md-editor-code .md-editor-copy-button,
+.md-editor-dark .md-editor-code .md-editor-code-head .md-editor-copy-button {
+  color: #c9cdd4;
+}
+
+/* ===================== LIGHT THEME ===================== */
+
+.md-editor .md-editor-preview {
+  --md-theme-quote-border: 5px solid #6366f1;
+}
+
+/* ===================== LAYOUT FIXES ===================== */
+
+/* Prevent mid-word breaks — break at word boundaries instead */
+.md-editor-preview {
+  width: 100% !important;
+  max-width: 100% !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  padding: 10px 16px !important;
+}
+
+.md-editor-preview p,
+.md-editor-preview li,
+.md-editor-preview h1,
+.md-editor-preview h2,
+.md-editor-preview h3,
+.md-editor-preview h4,
+.md-editor-preview h5,
+.md-editor-preview h6 {
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Prevent long unbreakable strings (URLs, paths) from overflowing */
+.md-editor-preview a,
+.md-editor-preview code {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+.md-editor-previewOnly {
+  width: 100% !important;
+}
+
+.md-editor-previewOnly .md-editor-preview-wrapper {
+  width: 100% !important;
+}
+
+.md-editor-previewOnly .md-editor-preview {
+  width: 100% !important;
+}
+
+/* Vuetify card override */
+.markdown-preview-card .md-editor-preview {
+  padding-inline: 20px !important;
+}
