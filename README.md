@@ -30,17 +30,11 @@ Base de conhecimento pessoal com controle de acesso por perfil. Crie, organize e
 ## Executando
 
 ```bash
-# 1. Banco de dados
-docker compose up -d
-
-# 2. Backend
-cd backend && mvn spring-boot:run
-
-# 3. Frontend
-cd frontend && npm install && npm run dev
+# Build Completo
+docker compose up -d --build
 ```
 
-Acesse `http://localhost:5173`
+Acesse `http://localhost:80`
 
 ## Usuários padrão
 
