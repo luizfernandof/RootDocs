@@ -26,7 +26,7 @@ public class AuthService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    private static final long REFRESH_TOKEN_DURATION_DAYS = 7;
+    private static final long REFRESH_TOKEN_DURATION_DAYS = 30;
 
     public AuthService(
             UserRepository userRepository,

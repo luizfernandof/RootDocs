@@ -22,8 +22,8 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
-  access-expiration: 900000
-  refresh-expiration: 604800000
+  access-expiration: 3600000
+  refresh-expiration: 2592000000
 
 seed:
   admin-password: ${SEED_ADMIN_PASSWORD}

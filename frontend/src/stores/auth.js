@@ -2,6 +2,25 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { api } from '../api/axios'
 
+function decodeTokenPayload(token) {
+  try {
+    const base64 = token.split('.')[1]
+    const json = atob(base64.replace(/-/g, '+').replace(/_/g, '/'))
+    return JSON.parse(json)
+  } catch {
+    return null
+  }
+}
+
+function getTokenRemainingMs(token) {
+  const payload = decodeTokenPayload(token)
+  if (!payload?.exp) return 0
+  return payload.exp * 1000 - Date.now()
+}
+
+const REFRESH_THRESHOLD_MS = 5 * 60 * 1000
+const REFRESH_INTERVAL_MS = 5 * 60 * 1000
+
 export const useAuthStore = defineStore('auth', () => {
   const accessToken = ref(localStorage.getItem('accessToken') || '')
   const refreshToken = ref(localStorage.getItem('refreshToken') || '')
@@ -10,6 +29,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!accessToken.value)
   const isEditor = computed(() => role.value === 'ROLE_EDITOR')
+
+  let refreshTimer = null
 
   async function login(credentials) {
     const { data } = await api.post('/auth/login', credentials)
@@ -21,11 +42,12 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('refreshToken', data.refreshToken)
     localStorage.setItem('username', data.username)
     localStorage.setItem('role', data.role)
-    // Clean up legacy key from previous implementation
     localStorage.removeItem('token')
+    startRefreshTimer()
   }
 
   async function refresh() {
+    if (!refreshToken.value) throw new Error('No refresh token')
     const { data } = await api.post('/auth/refresh', { refreshToken: refreshToken.value })
     accessToken.value = data.accessToken
     refreshToken.value = data.refreshToken
@@ -33,13 +55,35 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('refreshToken', data.refreshToken)
   }
 
+  function startRefreshTimer() {
+    stopRefreshTimer()
+    refreshTimer = setInterval(async () => {
+      if (!refreshToken.value) return
+      const remaining = getTokenRemainingMs(accessToken.value)
+      if (remaining < REFRESH_THRESHOLD_MS) {
+        try {
+          await refresh()
+        } catch {
+          logout()
+        }
+      }
+    }, REFRESH_INTERVAL_MS)
+  }
+
+  function stopRefreshTimer() {
+    if (refreshTimer) {
+      clearInterval(refreshTimer)
+      refreshTimer = null
+    }
+  }
+
   async function logout() {
+    stopRefreshTimer()
     try {
       if (refreshToken.value) {
         await api.post('/auth/logout', { refreshToken: refreshToken.value })
       }
     } catch {
-      // Backend call best-effort — clear locally either way
     } finally {
       accessToken.value = ''
       refreshToken.value = ''
@@ -53,5 +97,9 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { accessToken, refreshToken, username, role, isAuthenticated, isEditor, login, refresh, logout }
+  if (isAuthenticated.value) {
+    startRefreshTimer()
+  }
+
+  return { accessToken, refreshToken, username, role, isAuthenticated, isEditor, login, refresh, logout, startRefreshTimer, stopRefreshTimer }
 })
